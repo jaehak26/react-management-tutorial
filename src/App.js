@@ -1,15 +1,65 @@
 import logo from './logo.svg';
 import './App.css';
+import Customer from './components/Customer'
 
 function App() {
 
-
+  const customers = [{
+      'id': 1,
+      //무작위로 사진을 보여주는 사이트라고 함
+      'image': 'https://placeimg.com/64/64/1', 
+      'name' : '나동빈',
+      'birthday': '961222',
+      'gender': '남자',
+      'job': '대학생'
+    },
+    {
+      'id': 2,
+      //무작위로 사진을 보여주는 사이트라고 함
+      'image': 'https://placeimg.com/64/64/2', 
+      'name' : '홍길동',
+      'birthday': '960305',
+      'gender': '남자',
+      'job': '프로그래머'
+    },
+    {
+      'id': 3,
+      //무작위로 사진을 보여주는 사이트라고 함
+      'image': 'https://placeimg.com/64/64/3', 
+      'name' : '이순신',
+      'birthday': '921205',
+      'gender': '남자',
+      'job': '디자이너'
+    }
+  ]
+  //result에서는 for문을 사용하지 못하므로
+  //이렇게 따로 함수를 작성하거나
+  //map함수를 result안에 작성하여 해결할 수 있다.
+  //
+  let rendering = ()=>{
+    //배열사용하면 되는 듯
+    let result = [];
+    let length = customers.length
+    for (let i=0; i<length ; i++){
+      result.push(
+      <Customer
+      id={customers[i].id}
+      image={customers[i].image}
+      name={customers[i].name} //props
+      birthday={customers[i].birthday}
+      gender={customers[i].gender}
+      job={customers[i].job}
+      />
+    )
+    }
+    return result
+  }
 
   return (
-    <div className="gray-background">
-      <img src={logo} let='logo'/>
-      <h2>Let's develop management system</h2>
-    </div>
+    //<></>는 <Fragment></Fragment>와 같다.
+    <>
+      {rendering()}
+    </>
   );
 }
 
