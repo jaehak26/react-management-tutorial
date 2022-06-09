@@ -1,21 +1,26 @@
 import React, {Fragment} from "react";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
+
 
 //props 활용
 function Customer(props) {
 
     return (
         <Fragment>
-            <CustomerProfile
-            id={props.id}
-            image={props.image}
-            name={props.name}
-            ></CustomerProfile>
-            
-            <CustomerInfo
-            birthday={props.birthday}
-            gender={props.gender}
-            job={props.job}
-            ></CustomerInfo>
+            <TableRow>
+                <TableCell>{props.id}</TableCell>
+                <TableCell><img src={props.image} alt='profile'></img></TableCell>
+                <TableCell>{props.name}</TableCell>
+                <TableCell>{props.birthday}</TableCell>
+                <TableCell>{props.gender}</TableCell>
+                <TableCell>{props.job}</TableCell>
+            </TableRow>
         </Fragment>
         
     )
