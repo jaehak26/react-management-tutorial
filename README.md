@@ -1,5 +1,6 @@
 # Management system
 본 프로젝트는 react/node 연습 목적으로 하고 있습니다
+https://youtube.com/playlist?list=PLRx0vPvlEmdCED62ZIWCbI-6G_jcwmuFB
 
 # Getting Started with Create React App
 
