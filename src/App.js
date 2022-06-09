@@ -7,9 +7,23 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { styled } from '@mui/system';
+import Paper from '@mui/material/Paper';
+import { createTheme } from '@mui/system';
 
-function App() {
+const theme = createTheme();
 
+const MyPaper = styled(Paper)(({theme})=>({
+  width: '100%',
+  marginTop: theme.spacing(3),
+  overflow: "auto"
+}))
+
+const MyTable = styled(Table)({
+  minWidth: 1080
+})
+
+function App(props) {
   const customers = [{
       'id': 1,
       //무작위로 사진을 보여주는 사이트라고 함
@@ -49,6 +63,7 @@ function App() {
     for (let i=0; i<length ; i++){
       result.push(
       <Customer
+      key={customers[i].id}
       id={customers[i].id}
       image={customers[i].image}
       name={customers[i].name} //props
@@ -61,10 +76,12 @@ function App() {
     return result
   }
 
+
+
   return (
     //<></>는 <Fragment></Fragment>와 같다.
-    <>
-      <Table>
+    <MyPaper theme={theme}>
+      <MyTable>
         <TableHead>
           <TableRow>
             <TableCell>번호</TableCell>
@@ -76,8 +93,8 @@ function App() {
           </TableRow>
         </TableHead>
         <TableBody>{rendering()}</TableBody>
-      </Table>
-    </>
+      </MyTable>
+    </MyPaper>
   );
 }
 
