@@ -10,7 +10,8 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/system';
 import Paper from '@mui/material/Paper';
 import { createTheme } from '@mui/system';
-import {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const theme = createTheme();
 
@@ -23,6 +24,10 @@ const MyPaper = styled(Paper)(({theme})=>({
 const MyTable = styled(Table)({
   minWidth: 1080
 })
+
+const MyProgress = styled(CircularProgress)( ({theme}) => ({
+  margin: theme.spacing(2)
+}) )
 
 function App(props) {
   const customer = [
@@ -58,15 +63,25 @@ function App(props) {
   //server의 api를 불러옴
 
 
-  const [state, setState] = useState({customers: []}); 
+  const [state, setState] = useState({
+    customers: [],
+    completed: 0
+    }); 
 
+    let progress = () => {
+      const {completed} = state;
+      setState({ completed: completed>=100 ? 0 : completed+1 })
+    }
+  //componentDidMount
   useEffect(() => {
     let callApi = async () => {
       const response = await fetch('/api/customers');
       const result = await response.json();
       return result;
     }
-    callApi().then(result => setState({customers: result.customers }))
+    callApi().then(result => setState({
+      customers: result.customers
+    }))
     .catch(error => console.log(error));
   }, [])
 
@@ -77,22 +92,31 @@ function App(props) {
   //
   let rendering = ()=>{
     //배열사용하면 되는 듯
-    let result = [];
-    let length = state.customers.length
-    for (let i=0; i<length ; i++){
-      result.push(
-      <Customer
-      key={state.customers[i].id}
-      id={state.customers[i].id}
-      image={state.customers[i].image}
-      name={state.customers[i].name} //props
-      birthday={state.customers[i].birthday}
-      gender={state.customers[i].gender}
-      job={state.customers[i].job}
-      />
-    )
+    if(state.customers != [] ){
+      let result = [];
+      let length = state.customers.length
+      for (let i=0; i<length ; i++){
+        result.push(
+        <Customer
+        key={state.customers[i].id}
+        id={state.customers[i].id}
+        image={state.customers[i].image}
+        name={state.customers[i].name} //props
+        birthday={state.customers[i].birthday}
+        gender={state.customers[i].gender}
+        job={state.customers[i].job}
+        />
+      )
+      }
+      return result
+    }else{
+      return (<TableRow>
+        <TableCell colSpan={6} align="center">
+          <MyProgress theme={theme}></MyProgress>
+        </TableCell>
+      </TableRow>)
     }
-    return result
+
   }
 
 
@@ -100,7 +124,7 @@ function App(props) {
   return (
     //<></>는 <Fragment></Fragment>와 같다.
     //state.customers가 ture일 때만 실행
-    <MyPaper theme={theme}>
+    <MyPaper theme={theme} variant='determinate' value={state.completed}>
       <MyTable>
         <TableHead>
           <TableRow>
