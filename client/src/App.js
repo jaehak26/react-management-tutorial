@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/system';
 import Paper from '@mui/material/Paper';
 import { createTheme } from '@mui/system';
+import {useState, useEffect} from 'react'
 
 const theme = createTheme();
 
@@ -24,7 +25,8 @@ const MyTable = styled(Table)({
 })
 
 function App(props) {
-  const customers = [{
+  const customer = [
+    {
       'id': 1,
       //무작위로 사진을 보여주는 사이트라고 함
       'image': 'https://placeimg.com/64/64/1', 
@@ -52,6 +54,23 @@ function App(props) {
       'job': '디자이너'
     }
   ]
+
+  //server의 api를 불러옴
+
+
+  const [state, setState] = useState({customers: []}); 
+
+  useEffect(() => {
+    let callApi = async () => {
+      const response = await fetch('/api/customers');
+      const result = await response.json();
+      return result;
+    }
+    callApi().then(result => setState({customers: result.customers }))
+    .catch(error => console.log(error));
+  }, [])
+
+
   //result에서는 for문을 사용하지 못하므로
   //이렇게 따로 함수를 작성하거나
   //map함수를 result안에 작성하여 해결할 수 있다.
@@ -59,17 +78,17 @@ function App(props) {
   let rendering = ()=>{
     //배열사용하면 되는 듯
     let result = [];
-    let length = customers.length
+    let length = state.customers.length
     for (let i=0; i<length ; i++){
       result.push(
       <Customer
-      key={customers[i].id}
-      id={customers[i].id}
-      image={customers[i].image}
-      name={customers[i].name} //props
-      birthday={customers[i].birthday}
-      gender={customers[i].gender}
-      job={customers[i].job}
+      key={state.customers[i].id}
+      id={state.customers[i].id}
+      image={state.customers[i].image}
+      name={state.customers[i].name} //props
+      birthday={state.customers[i].birthday}
+      gender={state.customers[i].gender}
+      job={state.customers[i].job}
       />
     )
     }
@@ -80,6 +99,7 @@ function App(props) {
 
   return (
     //<></>는 <Fragment></Fragment>와 같다.
+    //state.customers가 ture일 때만 실행
     <MyPaper theme={theme}>
       <MyTable>
         <TableHead>
@@ -92,7 +112,7 @@ function App(props) {
             <TableCell>직업</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>{rendering()}</TableBody>
+        <TableBody>{rendering() }</TableBody>
       </MyTable>
     </MyPaper>
   );
