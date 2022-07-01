@@ -12,6 +12,7 @@ import Paper from '@mui/material/Paper';
 import { createTheme } from '@mui/system';
 import {useState, useEffect} from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
+import CustomerAdd from './components/CustomerAdd';
 
 const theme = createTheme();
 
@@ -124,6 +125,7 @@ function App(props) {
   return (
     //<></>는 <Fragment></Fragment>와 같다.
     //state.customers가 ture일 때만 실행
+    <>
     <MyPaper theme={theme} variant='determinate' value={state.completed}>
       <MyTable>
         <TableHead>
@@ -139,6 +141,8 @@ function App(props) {
         <TableBody>{rendering() }</TableBody>
       </MyTable>
     </MyPaper>
+    <CustomerAdd></CustomerAdd>
+    </>
   );
 }
 
