@@ -68,19 +68,18 @@ function App(props) {
     completed: 0
     }); 
 
-    let progress = () => {
-      const {completed} = state;
-      setState({ completed: completed>=100 ? 0 : completed+1 })
-    }
+
   //componentDidMount
   useEffect(() => {
     let callApi = async () => {
       const response = await fetch('/api/customers');
       const result = await response.json();
+      console.log(result)
       return result;
     }
+
     callApi().then(result => setState({
-      customers: result.customers
+      customers: result
     }))
     .catch(error => console.log(error));
   }, [])
@@ -91,6 +90,7 @@ function App(props) {
   //map함수를 result안에 작성하여 해결할 수 있다.
   //
   let rendering = ()=>{
+    console.log(state.customers)
     //배열사용하면 되는 듯
     if(state.customers != [] ){
       let result = [];

@@ -1,5 +1,9 @@
 //package.json - yarn dev를 입력하면 둘 다 실행이 되게끔 함
 
+//file system을 통해 파일을 읽어옴
+const fs = require("fs");
+const mysql = require("mysql");
+
 const express= require("express");
 //const bodyParser = require("body-parser");
 const app = express();
@@ -7,6 +11,35 @@ const port = process.env.PORT || 5000;
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+
+//database.json 읽기
+const data = fs.readFileSync("./database.json");
+const conf = JSON.parse(data);
+
+
+//mysql 연결(database.json에 있는 데이터 사용)
+const connection = mysql.createConnection({
+  host: conf.host,
+  user: conf.user,
+  password: conf.password,
+  port: conf.port,
+  database: conf.database
+});
+//db 연결 수행
+connection.connect();
+
+//api만들기
+
+app.get('/api/customers', 
+  (req,res)=>{
+    console.log(data);
+    connection.query(
+      "SELECT * FROM CUSTOMER",
+      (err, rows, fields) =>{
+        res.send(rows);
+      }
+    )
+  })
 
 //api만들기 (json 파일형식)
 app.get('/api/hello', 
@@ -16,7 +49,7 @@ app.get('/api/hello',
 
 //json파일 검사기 - jsonlint
 //json파일에서는 string을 작은 따옴표를 쓰면 안된다.
-app.get('/api/customers', 
+app.get('/api/customer', 
 (req,res) => {
     res.send( {"customers": [
         {
