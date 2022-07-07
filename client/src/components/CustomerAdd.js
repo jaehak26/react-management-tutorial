@@ -40,6 +40,17 @@ function CustomerAdd(props)
             .then((response)=>{
                 console.log(response.data)
             })
+
+        //임시로 서버로 보낸 이후 state 값을 다시 초기화
+        setState({
+            file: null,
+            userName: "",
+            birthday: "",
+            gender: "",
+            job: "",
+            fileName:""
+        })
+        window.location.reload();
     }
 
     let handleFileChange = (event) =>{

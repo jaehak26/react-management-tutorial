@@ -16,7 +16,7 @@ app.use(express.json());
 const data = fs.readFileSync("./database.json");
 const conf = JSON.parse(data);
 
-
+//connection 객체 생성
 //mysql 연결(database.json에 있는 데이터 사용)
 const connection = mysql.createConnection({
   host: conf.host,
@@ -27,6 +27,11 @@ const connection = mysql.createConnection({
 });
 //db 연결 수행
 connection.connect();
+
+//upload
+const multer = require('multer');
+//업로드 파일 지정
+const upload = multer({dest: './upload'})
 
 //api만들기
 
@@ -39,6 +44,23 @@ app.get('/api/customers',
         res.send(rows);
       }
     )
+  })
+
+  app.use('/image',express.static('./upload'));
+// customers경로에 고객 추가 데이터를 전송 시 이를 처리할 수 있도록 함
+  app.use('/api/customers', upload.single('image'),
+  (req, res) => {
+    let sql = "INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, ?, ?)";
+    let image = '/image/'+ req.file.filename;
+    let name = req.body.name;
+    let birthday = req.body.birthday;
+    let gender = req.body.gender;
+    let job = req.body.job;
+    let params = [image, name, birthday, gender, job];
+    connection.query(sql, params,
+      (err,rows,fields) => {
+        res.send(rows);
+      })
   })
 
 //api만들기 (json 파일형식)
